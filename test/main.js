@@ -22,7 +22,7 @@ describe('dotenv-expand', function () {
     it('expands environment variables', function (done) {
       var dotenv = {
         'BASIC': 'basic',
-        'BASIC_EXPAND': '${BASIC}'
+        'BASIC_EXPAND': '$BASIC'
       }
       var obj = dotenvExpand(dotenv)
 
@@ -33,7 +33,7 @@ describe('dotenv-expand', function () {
     it('expands environment variables existing already on the machine', function (done) {
       process.env.MACHINE = 'machine'
       var dotenv = {
-        'MACHINE_EXPAND': '${MACHINE}'
+        'MACHINE_EXPAND': '$MACHINE'
       }
       var obj = dotenvExpand(dotenv)
 
@@ -43,7 +43,7 @@ describe('dotenv-expand', function () {
 
     it('expands missing environment variables to an empty string', function (done) {
       var dotenv = {
-        'UNDEFINED_EXPAND': '${UNDEFINED_ENV_KEY}'
+        'UNDEFINED_EXPAND': '$UNDEFINED_ENV_KEY'
       }
       var obj = dotenvExpand(dotenv)
 
@@ -55,7 +55,7 @@ describe('dotenv-expand', function () {
       process.env.MACHINE = 'machine'
       var dotenv = {
         'MACHINE': 'machine_env',
-        'MACHINE_EXPAND': '${MACHINE}'
+        'MACHINE_EXPAND': '$MACHINE'
       }
       var obj = dotenvExpand(dotenv)
 
@@ -123,6 +123,20 @@ describe('dotenv-expand', function () {
       var obj = dotenvExpand(dotenv)
 
       obj['MONGOLAB_URI_RECURSIVELY'].should.eql('mongodb://username:password@abcd1234.mongolab.com:12345/heroku_db')
+      done()
+    })
+
+    it('multiple expand', function (done) {
+      var obj = dotenvExpand(dotenv)
+
+      obj['WITHOUT_CURLY_BRACES_URI'].should.eql('mongodb://username:password@abcd1234.mongolab.com:12345/heroku_db')
+      done()
+    })
+
+    it('should expand recursively', function (done) {
+      var obj = dotenvExpand(dotenv)
+
+      obj['WITHOUT_CURLY_BRACES_URI_RECURSIVELY'].should.eql('mongodb://username:password@abcd1234.mongolab.com:12345/heroku_db')
       done()
     })
   })
